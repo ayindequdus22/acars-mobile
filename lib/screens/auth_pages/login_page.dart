@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:acars_mobile/constants/color.dart';
+import 'package:acars_mobile/controllers/auth_controller.dart';
+import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:http/http.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,9 +13,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool obscureMe = true;
-  late final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  final AuthController authController = Get.put(AuthController());
+  
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
+
   @override
   void initState() {
     super.initState();
@@ -32,25 +33,27 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-//   final uri ="http://192.168.43.188:5000/hello";
-// void fetch() async{
-//   try {
-//     final response = await get(Uri.parse(uri));
-//  var me=  jsonDecode(response.body);
-//  print(me);
-//   } catch (e) {
-//     print(e);
-//   }
-// }
-  validateUser(String? value) {
-    if (value!.isEmpty) {
-      return "Username can not be Empty";
+  String? validateUser(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Username cannot be empty";
     }
-    if(value.isEmail){
-return "Its an email";
+    if (!value.isEmail) {
+      return "Invalid email";
     }
-    print(value);
+    return null;
   }
+ String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Password cannot be empty";
+    }
+    if (value.length <8 || value.length >20) {
+      return "Password must have 8-20 characters";
+    }
+    return null;
+  }
+//  ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text("Flagged an error: ${response.statusText}")),
+    //   );
 
   @override
   Widget build(BuildContext context) {
@@ -64,65 +67,67 @@ return "Its an email";
             children: [
               Image.asset(
                 "assets/bg.png",
-                height: 500,
+     height: setHeight(600),
                 fit: BoxFit.cover,
               ),
-              const Text("Login into A-cars",
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 30,
-                  )),
+               const Text(
+                "Login into A-cars",
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 30,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
                   key: formkey,
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 60,
-                        child: TextFormField(
-                          style: const TextStyle(fontSize: 20),    
-                          validator: (value) =>   validateUser(value),
-                          decoration: InputDecoration(
-                            hintText: "Email",
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            hintStyle: const TextStyle(fontSize: 20.0),
-                          ),
+                      TextFormField(
+                        controller: emailController,
+                        style:  TextStyle(fontSize: setHeight(20)),
+                        validator: validateUser,
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          contentPadding: const EdgeInsets.all(10),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          hintStyle:  TextStyle(fontSize: setHeight(30)),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        height: 60,
-                        child: TextFormField(
-                      
-                          obscureText: obscureMe,
-                          style: const TextStyle(fontSize: 20),
-                          obscuringCharacter: "*",
-                          decoration: InputDecoration(
-                            suffix: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  obscureMe = !obscureMe;
-                                });
-                              },
-                              icon: Icon(obscureMe
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
-                            ),
-                            hintText: "Password",
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            hintStyle: const TextStyle(fontSize: 20.0),
+                       SizedBox(height: setHeight(10)),
+                   
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: obscureMe,
+                        style:  TextStyle(fontSize: setHeight(20)),
+                        obscuringCharacter: "*",
+                        validator: validatePassword,
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          suffix: 
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                obscureMe = !obscureMe;
+                              });
+                            },
+                            child: Icon(obscureMe
+                                ? Icons.visibility_off
+                                : Icons.visibility),
                           ),
+                          contentPadding: const EdgeInsets.all(10),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          hintStyle:  TextStyle(fontSize: setHeight(30)),
                         ),
                       ),
-                      const SizedBox(height: 10),
+
+                       SizedBox(height: setHeight(10)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -157,10 +162,10 @@ return "Its an email";
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                       SizedBox(height: setHeight(10)),
                       SizedBox(
                         width: double.infinity,
-                        height: 70,
+                        height: setHeight(70),
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor:
@@ -173,6 +178,7 @@ return "Its an email";
                           ),
                           onPressed: () {
                             if (formkey.currentState!.validate()) {
+                               authController.login(emailController.text, passwordController.text);
                               print("Herlo");
                             }
                           },
@@ -182,7 +188,7 @@ return "Its an email";
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: setHeight(20)),
                     ],
                   ),
                 ),

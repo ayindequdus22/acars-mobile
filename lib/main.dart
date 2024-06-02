@@ -1,9 +1,12 @@
 import 'package:acars_mobile/constants/text.dart';
 import 'package:acars_mobile/screens/auth_pages/login_page.dart';
 import 'package:acars_mobile/screens/auth_pages/register_page.dart';
+import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-void main() {
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
+Future<void> main() async {
+  //  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -13,6 +16,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    screenHeightWidth();
     return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -39,9 +43,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/login",
       getPages: [
-       GetPage(name: "/", page:()=>const RegisterPage(),),
-       GetPage(name: "/login", page:()=>const LoginPage(),),
-       GetPage(name: "/register", page:()=>const RegisterPage(),),
+       GetPage(name: "/", page:()=>const RegisterPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
+       GetPage(name: "/login", page:()=>const LoginPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
+       GetPage(name: "/register", page:()=>const RegisterPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
       ],
 
     );
