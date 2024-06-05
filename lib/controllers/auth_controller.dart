@@ -6,11 +6,18 @@ import 'package:get/get.dart';
 class AuthController extends GetxController {
   final ApiService apiService = ApiService();
 
+
   Future<void> login(String username, String password) async {
     try {
       final response = await apiService.login(username, password);
-      if (response.statusCode == 200) {
+      print(response.body);
+      
+ScaffoldMessenger(child:
+        SnackBar(content: Text("Flagged an error: ${response.statusText}")));
+      
+      if (response.statusCode == 202) {
         // Handle successful login
+        Get.toNamed("/register");
         if (kDebugMode) {
           print("Login successful: ${response.body}");
         }

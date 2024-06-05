@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextFormField(
                         controller: emailController,
-                        style:  TextStyle(fontSize: setHeight(20)),
+                        style:  TextStyle(fontSize: setHeight(29)),
                         validator: validateUser,
                         decoration: InputDecoration(
                           hintText: "Email",
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                       TextFormField(
                         controller: passwordController,
                         obscureText: obscureMe,
-                        style:  TextStyle(fontSize: setHeight(20)),
+                        style:  TextStyle(fontSize: setHeight(29)),
                         obscuringCharacter: "*",
                         validator: validatePassword,
                         decoration: InputDecoration(
