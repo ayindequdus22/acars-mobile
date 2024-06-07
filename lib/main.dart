@@ -2,6 +2,7 @@ import 'package:acars_mobile/constants/text.dart';
 import 'package:acars_mobile/screens/cart_page.dart';
 import 'package:acars_mobile/screens/auth_pages/login_page.dart';
 import 'package:acars_mobile/screens/auth_pages/register_page.dart';
+import 'package:acars_mobile/screens/home_page.dart';
 import 'package:acars_mobile/screens/product_page.dart';
 import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: "/login",
+      initialRoute: "/products",
       getPages: [
-       GetPage(name: "/", page:()=>const RegisterPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
 
-       GetPage(name: "/home", page:()=>const LoginPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
-       GetPage(name: "/products", page:()=>const ProductPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
+       GetPage(name: "/", page:()=>const HomePage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
+       GetPage(name: "/products", page:()=> ProductPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
        GetPage(name: "/carts", page:()=>const CartPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
        GetPage(name: "/coming-soon", page:()=>const LoginPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
        GetPage(name: "/login", page:()=>const LoginPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
@@ -44,3 +44,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// http://localhost:7000/api/products/all-products

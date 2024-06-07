@@ -1,5 +1,4 @@
 import 'package:acars_mobile/constants/color.dart';
-import 'package:acars_mobile/controllers/auth_controller.dart';
 import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool obscureMe = true;
-  final AuthController authController = Get.put(AuthController());
   
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   late final TextEditingController emailController;
@@ -178,7 +176,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           onPressed: () {
                             if (formkey.currentState!.validate()) {
-                               authController.login(emailController.text, passwordController.text);
                               print("Herlo");
                             }
                           },

@@ -1,5 +1,4 @@
 import 'package:acars_mobile/constants/color.dart';
-import 'package:acars_mobile/controllers/auth_controller.dart';
 import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +13,6 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool obscureMe = true;
   bool obscurePassword = true;
-  final AuthController authController = Get.put(AuthController());
 
   late final TextEditingController usernameController;
   late final TextEditingController emailController;
@@ -185,7 +183,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               Get.toNamed("/login");
                             },
                             child: Text(
-                              "Register Now",
+                              "Login",
                               style: TextStyle(
                                 color: AppColors.primary,
                                 fontSize: Theme.of(context)
@@ -212,7 +210,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           onPressed: () {
-                            authController.register(usernameController.text, emailController.text, passwordController.text);
                           },
                           child: Text(
                             "Register now",

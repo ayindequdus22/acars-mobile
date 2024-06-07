@@ -1,24 +1,26 @@
+import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 class CustomTextTheme {
   TextTheme getTextTheme(BuildContext context) {
-    return const TextTheme(
+    return  TextTheme(
       titleLarge: TextStyle(
-        fontSize: 26,
+        fontSize: setHeight(36),
+        color: Colors.white,
         fontWeight: FontWeight.w700,
       ),
       titleMedium: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w500,
+        fontSize: setHeight(24),
+        fontWeight: FontWeight.w500,color: Colors.white
       ),
       titleSmall: TextStyle(
-             fontSize: 20,
+             fontSize: setHeight(20),
       ),
       labelMedium: TextStyle(
-        fontSize: 20,
+        fontSize: setHeight(20),
         fontWeight: FontWeight.w700,
       ),
       displayMedium: TextStyle(
-        fontSize: 20,
+        fontSize: setHeight(20),
         fontWeight: FontWeight.w700,
       ),
     );
