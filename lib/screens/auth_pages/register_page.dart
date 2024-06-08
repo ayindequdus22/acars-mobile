@@ -1,14 +1,15 @@
 import 'package:acars_mobile/constants/color.dart';
+import 'package:acars_mobile/controllers/auth_controller.dart';
 import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
-
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
+final RegisterController registerController = Get.put(RegisterController());
 
 class _RegisterPageState extends State<RegisterPage> {
   bool obscureMe = true;

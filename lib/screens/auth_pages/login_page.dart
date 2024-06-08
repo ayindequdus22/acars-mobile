@@ -1,4 +1,5 @@
 import 'package:acars_mobile/constants/color.dart';
+import 'package:acars_mobile/controllers/auth_controller.dart';
 import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,9 +11,11 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+final LoginController loginController = Get.put(LoginController());
+
 class _LoginPageState extends State<LoginPage> {
   bool obscureMe = true;
-  
+
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
@@ -40,18 +43,19 @@ class _LoginPageState extends State<LoginPage> {
     }
     return null;
   }
- String? validatePassword(String? value) {
+
+  String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return "Password cannot be empty";
     }
-    if (value.length <8 || value.length >20) {
+    if (value.length < 8 || value.length > 20) {
       return "Password must have 8-20 characters";
     }
     return null;
   }
 //  ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text("Flagged an error: ${response.statusText}")),
-    //   );
+  //     SnackBar(content: Text("Flagged an error: ${response.statusText}")),
+  //   );
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +69,10 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Image.asset(
                 "assets/bg.png",
-     height: setHeight(600),
+                height: setHeight(600),
                 fit: BoxFit.cover,
               ),
-               const Text(
+              const Text(
                 "Login into A-cars",
                 style: TextStyle(
                   color: AppColors.primary,
@@ -83,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextFormField(
                         controller: emailController,
-                        style:  TextStyle(fontSize: setHeight(29)),
+                        style: TextStyle(fontSize: setHeight(29)),
                         validator: validateUser,
                         decoration: InputDecoration(
                           hintText: "Email",
@@ -92,21 +96,19 @@ class _LoginPageState extends State<LoginPage> {
                           filled: true,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15)),
-                          hintStyle:  TextStyle(fontSize: setHeight(30)),
+                          hintStyle: TextStyle(fontSize: setHeight(30)),
                         ),
                       ),
-                       SizedBox(height: setHeight(10)),
-                   
+                      SizedBox(height: setHeight(10)),
                       TextFormField(
                         controller: passwordController,
                         obscureText: obscureMe,
-                        style:  TextStyle(fontSize: setHeight(29)),
+                        style: TextStyle(fontSize: setHeight(29)),
                         obscuringCharacter: "*",
                         validator: validatePassword,
                         decoration: InputDecoration(
                           hintText: "Password",
-                          suffix: 
-                          GestureDetector(
+                          suffix: GestureDetector(
                             onTap: () {
                               setState(() {
                                 obscureMe = !obscureMe;
@@ -121,11 +123,10 @@ class _LoginPageState extends State<LoginPage> {
                           filled: true,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15)),
-                          hintStyle:  TextStyle(fontSize: setHeight(30)),
+                          hintStyle: TextStyle(fontSize: setHeight(30)),
                         ),
                       ),
-
-                       SizedBox(height: setHeight(10)),
+                      SizedBox(height: setHeight(10)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -160,32 +161,43 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                       SizedBox(height: setHeight(10)),
-                      SizedBox(
-                        width: double.infinity,
-                        height: setHeight(70),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                const WidgetStatePropertyAll(AppColors.primary),
-                            shape: WidgetStatePropertyAll(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                      SizedBox(height: setHeight(10)),
+                      Obx(() {
+                        if (loginController.isLoading.value) {
+                          return const CircularProgressIndicator(
+                            color: AppColors.primary,
+                          );
+                        }
+                        return SizedBox(
+                          width: double.infinity,
+                          height: setHeight(70),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: const WidgetStatePropertyAll(
+                                  AppColors.primary),
+                              shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
+                            onPressed: () {
+                              if (formkey.currentState!.validate()) {
+                                final email = emailController.text;
+                                final password = passwordController.text;
+                                FocusScope.of(context).unfocus();
+                                loginController.login(email, password);
+                              }
+                            },
+                            child: const Text(
+                              "Login now",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 25),
+                            ),
                           ),
-                          onPressed: () {
-                            if (formkey.currentState!.validate()) {
-                              print("Herlo");
-                            }
-                          },
-                          child: const Text(
-                            "Login now",
-                            style: TextStyle(color: Colors.white, fontSize: 25),
-                          ),
-                        ),
-                      ),
-                       SizedBox(height: setHeight(20)),
+                        );
+                      }),
+                      SizedBox(height: setHeight(20)),
                     ],
                   ),
                 ),

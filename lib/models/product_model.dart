@@ -1,17 +1,20 @@
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 List<ProductModel> productFromJson(String str) =>
     List<ProductModel>.from(json.decode(str).map((x) => ProductModel.fromJson(x)));
 
 String productToJson(List<ProductModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@immutable
 class ProductModel {
   final String id;
   final String name;
   final String image;
   final num price; 
 
-  ProductModel({
+  const ProductModel({
     required this.id,
     required this.name,
     required this.price,
@@ -32,41 +35,3 @@ class ProductModel {
         "image": image,
       };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// @immutable
-// class ProductModel {
-//   final String id;
-//   final String name;
-//   final String image;
-//   final int price;
-
-//   const ProductModel({
-//     required this.id,
-//     required this.name,
-//     required this.image,
-//     required this.price,
-//   });
-
-//   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-//         id: json['_id'] as String,
-//         name: json['name'] as String,
-//         image: json['image'] as String,
-//         price: json['price'] as int,
-//       );
-// }

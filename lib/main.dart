@@ -27,12 +27,13 @@ class MyApp extends StatelessWidget {
         textTheme: CustomTextTheme().getTextTheme(context),
         scaffoldBackgroundColor:const Color.fromRGBO(4, 12, 24, 1),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        
         useMaterial3: true,
       ),
-      initialRoute: "/products",
+      initialRoute: "/register",
       getPages: [
 
-       GetPage(name: "/", page:()=>const HomePage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
+       GetPage(name: "/", page:()=>const LoginPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
        GetPage(name: "/products", page:()=> ProductPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
        GetPage(name: "/carts", page:()=>const CartPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),
        GetPage(name: "/coming-soon", page:()=>const LoginPage(),transition: Transition.cupertinoDialog,transitionDuration: const Duration(seconds: 1)),

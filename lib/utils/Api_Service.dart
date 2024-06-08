@@ -1,59 +1,12 @@
-
+import 'dart:convert';
+import 'dart:developer';
 import 'package:acars_mobile/models/auth_models.dart';
 import 'package:acars_mobile/models/product_model.dart';
-import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
- 
-// class ApiService extends GetConnect {
-//  ;
-
-//   @override
-//   void onInit() {
-//     httpClient.baseUrl = apiUrl;
-//     httpClient.defaultContentType = 'application/json';
-
-//     httpClient.addRequestModifier<void>((request) {
-//       request.headers['Accept'] = 'application/json';
-//       return request;
-//     });
-
-//     // Optionally, enable credentials
-//     // httpClient.withCredentials = true;
-//   }
-
-//   Future<Response> login(LoginRequest loginRequest) async {
-//     try {
-//       final response = await post('auth/login', loginRequest.toJson());
-//       return response;
-//     } catch (e) {
-//       return Response(statusCode: 500, statusText: 'Error: $e');
-//     }
-//   }
-
-//   Future<Response> register(RegisterRequest registerRequest) async {
-//     try {
-//       final response = await post('auth/register', registerRequest.toJson());
-//       return response;
-//     } catch (e) {
-//       return Response(statusCode: 500, statusText: 'Error: $e');
-//     }
-//   }
-//     Future<bool> validateToken(String token) async {
-//     final response = await get('auth/myprofile', headers: {
-//       'Authorization': 'Bearer $token',
-//     });
-// print(response);
-//     if (response.statusCode == 202) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
-// }
 final String apiUrl = dotenv.env['API_URL'] ?? '';
 
-class RemoteServices {
+class ApiService {
   static var client = http.Client();
 
   static Future<List<ProductModel>?> fetchProducts() async {
@@ -63,7 +16,7 @@ class RemoteServices {
         var json = response.body;
         return productFromJson(json);
       } else {
-        print("Error: ${response.statusCode}");
+        log("Error: ${response.statusCode}");
         return null;
       }
     } catch (e) {
@@ -71,4 +24,70 @@ class RemoteServices {
       return null;
     }
   }
+
+  static Future<Map<String, dynamic>?> login(String email, String password) async {
+    try {
+      final data = LoginRequestModel(email: email, password: password);
+      final response = await client.post(
+        Uri.parse("${apiUrl}auth/login"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: loginToJson(data),
+      );
+
+        if (response.statusCode == 200) {
+        // Successfully received response
+        return {
+          'statusCode': response.statusCode,
+          'body': json.decode(response.body),
+        };
+      } else {
+        // Handle non-200 status codes
+        return {
+          'statusCode': response.statusCode,
+          'error': response.body,
+        }; 
+    }
+    } catch (e) {
+      // Handle errors
+ return {
+        'statusCode': 500,
+        'error': 'Error occurred during login: $e',
+      };
+    }
+  }
+static Future<Map<String, dynamic>?> register(String username,String email, String password) async {
+    try {
+      final data = RegisterRequestModel(email: email,username: username, password: password);
+      final response = await client.post(
+        Uri.parse("${apiUrl}auth/register"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: registerToJson(data),
+      );
+          if (response.statusCode == 200) {
+        // Successfully received response
+        return {
+          'statusCode': response.statusCode,
+          'body': json.decode(response.body),
+        };
+      } else {
+        // Handle non-200 status codes
+        return {
+          'statusCode': response.statusCode,
+          'error': response.body,
+        }; 
+    }
+    } catch (e) {
+      // Handle errors
+ return {
+        'statusCode': 500,
+        'error': 'Error occurred during Registration: $e',
+      };
+    }
+  }
 }
+
+  

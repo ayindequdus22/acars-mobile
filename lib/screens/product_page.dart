@@ -1,5 +1,4 @@
 import 'package:acars_mobile/controllers/productController.dart';
-import 'package:acars_mobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
