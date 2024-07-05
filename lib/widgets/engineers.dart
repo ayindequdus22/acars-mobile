@@ -10,7 +10,7 @@ class Engineers extends StatelessWidget {
 itemCount: engineerModels.length,
     gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
     itemBuilder:(context,index){
-      return Container(
+      return SizedBox(
         child: Column(children: [
           Image.network(engineerModels[index].image)
         ],),

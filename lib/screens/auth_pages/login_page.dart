@@ -35,10 +35,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   String? validateUser(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null) {
       return "Username cannot be empty";
     }
-    if (!value.isEmail) {
+    if (!value.isEmail || value.length < 12 || value.length >= 30) {
       return "Invalid email";
     }
     return null;

@@ -1,29 +1,14 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:acars_mobile/models/auth_models.dart';
-import 'package:acars_mobile/models/product_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
+
 final String apiUrl = dotenv.env['API_URL'] ?? '';
 
 class ApiService {
   static var client = http.Client();
 
-  static Future<List<ProductModel>?> fetchProducts() async {
-    try {
-      var response = await client.get(Uri.parse("${apiUrl}products/all-products"));
-      if (response.statusCode == 200) {
-        var json = response.body;
-        return productFromJson(json);
-      } else {
-        log("Error: ${response.statusCode}");
-        return null;
-      }
-    } catch (e) {
-      print("My Error: $e");
-      return null;
-    }
-  }
+
 
   static Future<Map<String, dynamic>?> login(String email, String password) async {
     try {
@@ -33,10 +18,9 @@ class ApiService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: loginToJson(data),
+        body: jsonEncode(data.toJson()), // Ensure you're encoding the body correctly
       );
-
-        if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         // Successfully received response
         return {
           'statusCode': response.statusCode,
@@ -46,20 +30,24 @@ class ApiService {
         // Handle non-200 status codes
         return {
           'statusCode': response.statusCode,
-          'error': response.body,
-        }; 
-    }
+          // 'error': response.body,
+        };
+      }
     } catch (e) {
       // Handle errors
- return {
+      return {
         'statusCode': 500,
         'error': 'Error occurred during login: $e',
       };
     }
   }
-static Future<Map<String, dynamic>?> register(String username,String email, String password) async {
+
+
+  static Future<Map<String, dynamic>?> register(
+      String username, String email, String password) async {
     try {
-      final data = RegisterRequestModel(email: email,username: username, password: password);
+      final data = RegisterRequestModel(
+          username: username, email: email, password: password);
       final response = await client.post(
         Uri.parse("${apiUrl}auth/register"),
         headers: {
@@ -67,7 +55,7 @@ static Future<Map<String, dynamic>?> register(String username,String email, Stri
         },
         body: registerToJson(data),
       );
-          if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         // Successfully received response
         return {
           'statusCode': response.statusCode,
@@ -78,16 +66,14 @@ static Future<Map<String, dynamic>?> register(String username,String email, Stri
         return {
           'statusCode': response.statusCode,
           'error': response.body,
-        }; 
-    }
+        };
+      }
     } catch (e) {
       // Handle errors
- return {
+      return {
         'statusCode': 500,
         'error': 'Error occurred during Registration: $e',
       };
     }
   }
 }
-
-  
